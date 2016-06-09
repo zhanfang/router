@@ -44,11 +44,12 @@ class Router {
   }
 
   init () {
-    window.addEventListener('haschange', (event) => {
+    window.addEventListener('hashchange', (event) => {
+      console.log(event)
       const hash = util.getHash(event.newURL)
       const state = history.state || {}
 
-      this.go(hash, state._index <= this._index)
+      this.go(hash, (state._index <= this._index))
     }, false)
 
     if(history.state && history.state._index){
@@ -76,10 +77,27 @@ class Router {
         node.innerHTML = html
         this._$container.appendChild(node)
         location.hash = `#${url}`
+
+        // 详见 http://javascript.ruanyifeng.com/bom/history.html#toc2 
+        try {
+          isBack ? this._index-- : this._index++
+          history.replaceState && history.replaceState({_index: this._index}, '', location.href)
+        } catch (e) {
+
+        }
+      }
+
+      const leave = (hasChildren) => {
+        if (hasChildren) {
+          let child = this._$container.children[0]
+          child.parentNode.removeChild(child)
+        }
       }
 
       // 判断是否有子节点
       const hasChildren = util.hasChildren(this._$container)
+      // 删除当前节点
+      leave(hasChildren)
       enter(hasChildren, route.render())
     }
   }
