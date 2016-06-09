@@ -35,6 +35,16 @@ export function getHash (url) {
 }
 
 /**
+ * has children
+ * @param {HTMLElement} parent
+ * @returns {boolean}
+ */
+export function hasChildren (parent) {
+  const children = parent.children
+  return children.length > 0
+}
+
+/**
  * noop
  */
 export function noop () {
