@@ -76,6 +76,19 @@ class Router {
 
         node.innerHTML = html
         this._$container.appendChild(node)
+
+        if (!isBack && this._options.enter) {
+          node.classList.add(this._options.enter)
+        }
+
+        if (this._options.enterTimeout > 0) {
+          setTimeout(()=>{
+            node.classList.remove(this._options.enter)
+          }, this._options.enterTimeout)
+        } else {
+          node.classList.remove(this._options.enter)
+        }
+
         location.hash = `#${url}`
 
         // 详见 http://javascript.ruanyifeng.com/bom/history.html#toc2 
@@ -90,7 +103,16 @@ class Router {
       const leave = (hasChildren) => {
         if (hasChildren) {
           let child = this._$container.children[0]
-          child.parentNode.removeChild(child)
+          if (isBack) {
+            child.classList.add(this._options.leave)
+          }
+          if (this._options.leaveTimeout > 0) {
+            setTimeout(() => {
+              child.parentNode.removeChild(child)
+            }, this._options.leaveTimeout)
+          } else {
+            child.parentNode.removeChild(child)
+          }
         }
       }
 
@@ -98,7 +120,7 @@ class Router {
       const hasChildren = util.hasChildren(this._$container)
       // 删除当前节点
       leave(hasChildren)
-      enter(hasChildren, route.render())
+      setTimeout(enter.bind(null, hasChildren, route.render()), this._options.leaveTimeout)
     }
   }
 }

@@ -1,4 +1,5 @@
 import Router from '../index.js'
+import './index.less'
 
 const router = new Router({
   container: '#container',
