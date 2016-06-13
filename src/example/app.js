@@ -22,6 +22,11 @@ const test1 = {
   className: 'test1',
   render: function () {
     return document.getElementById('test1').innerHTML
+  },
+  bind: function () {
+    document.getElementById('h2').addEventListener('click', function (e) {
+      alert('123');
+    });
   }
 }
 router.push(home).push(test1).setDefault('/').init()

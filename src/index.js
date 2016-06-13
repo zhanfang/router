@@ -98,6 +98,10 @@ class Router {
         } catch (e) {
 
         }
+
+        if (typeof route.bind === 'function') {
+          route.bind.call(node)
+        }
       }
 
       const leave = (hasChildren) => {
